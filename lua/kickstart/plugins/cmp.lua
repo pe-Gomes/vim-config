@@ -1,5 +1,3 @@
-local lsp = require '../../utils/lsp'
-
 return {
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -30,20 +28,17 @@ return {
         },
       },
       {
-        'zbirenbaum/copilot-cmp',
-        dependencies = 'copilot.lua',
-        opts = {},
+        'tzachar/cmp-tabnine',
+        build = './install.sh',
+        opts = {
+          max_lines = 1000,
+          max_num_results = 3,
+          sort = true,
+        },
         config = function(_, opts)
-          local copilot_cmp = require 'copilot_cmp'
-          copilot_cmp.setup(opts)
-          -- attach cmp source whenever copilot attaches
-          -- fixes lazy-loading issues with the copilot cmp source
-          lsp.on_attach(function(client)
-            copilot_cmp._on_insert_enter {}
-          end, 'copilot')
+          require('cmp_tabnine.config'):setup(opts)
         end,
       },
-
       'saadparwaiz1/cmp_luasnip',
       -- Adds other completion capabilities.
       --  nvim-cmp does not ship with all sources by default. They are split
@@ -132,7 +127,7 @@ return {
           { name = 'luasnip', group_index = 2 },
           { name = 'path', group_index = 2 },
           { name = 'buffer', group_index = 2 },
-          { name = 'copilot', group_index = 2 },
+          { name = 'cmp_tabnine', group_index = 2 },
         },
       }
     end,
